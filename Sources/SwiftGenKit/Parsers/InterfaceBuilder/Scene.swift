@@ -9,10 +9,12 @@ import Kanna
 
 extension InterfaceBuilder {
   struct Scene {
+    let sceneID: String
     let identifier: String
     let tag: String
     let customClass: String?
     let customModule: String?
+    let segues: Set<Segue>
     let platform: Platform
 
     private static let tagTypeMap = [
@@ -48,6 +50,8 @@ extension InterfaceBuilder {
 // MARK: - XML
 
 private enum XML {
+  static let sceneSegueXPath = "//connections/segue"
+  static let sceneIDAttribute = "id"
   static let customClassAttribute = "customClass"
   static let customModuleAttribute = "customModule"
   static let storyboardIdentifierAttribute = "storyboardIdentifier"
@@ -55,10 +59,14 @@ private enum XML {
 
 extension InterfaceBuilder.Scene {
   init(with object: Kanna.XMLElement, platform: InterfaceBuilder.Platform) {
+    sceneID = object[XML.sceneIDAttribute] ?? ""
     identifier = object[XML.storyboardIdentifierAttribute] ?? ""
     tag = object.tagName ?? ""
     customClass = object[XML.customClassAttribute]
     customModule = object[XML.customModuleAttribute]
+    segues = Set(object.xpath(XML.sceneSegueXPath).map {
+      InterfaceBuilder.Segue(with: $0, platform: platform)
+    })
     self.platform = platform
   }
 }
@@ -67,14 +75,11 @@ extension InterfaceBuilder.Scene {
 
 extension InterfaceBuilder.Scene: Equatable { }
 func == (lhs: InterfaceBuilder.Scene, rhs: InterfaceBuilder.Scene) -> Bool {
-  return lhs.identifier == rhs.identifier &&
-    lhs.tag == rhs.tag &&
-    lhs.customClass == rhs.customClass &&
-    lhs.customModule == rhs.customModule
+  return lhs.sceneID == rhs.sceneID
 }
 
 extension InterfaceBuilder.Scene: Hashable {
   var hashValue: Int {
-    return identifier.hashValue ^ tag.hashValue ^ (customModule?.hashValue ?? 0) ^ (customClass?.hashValue ?? 0)
+    return sceneID.hashValue
   }
 }

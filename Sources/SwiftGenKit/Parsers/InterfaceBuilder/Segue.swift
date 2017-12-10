@@ -12,6 +12,7 @@ extension InterfaceBuilder {
     let identifier: String
     let customClass: String?
     let customModule: String?
+    let destination: String
     let platform: Platform
 
     var type: String {
@@ -40,6 +41,7 @@ private enum XML {
   static let identifierAttribute = "identifier"
   static let customClassAttribute = "customClass"
   static let customModuleAttribute = "customModule"
+  static let destinationAttribute = "destination"
 }
 
 extension InterfaceBuilder.Segue {
@@ -47,6 +49,7 @@ extension InterfaceBuilder.Segue {
     identifier = object[XML.identifierAttribute] ?? ""
     customClass = object[XML.customClassAttribute]
     customModule = object[XML.customModuleAttribute]
+    destination = object[XML.destinationAttribute] ?? ""
     self.platform = platform
   }
 }
