@@ -167,7 +167,8 @@ namespace :output do
            else
              defs = ["#{MODULE_OUTPUT_PATH}/Definitions.swift"]
            end
-    defs << "#{MODULE_OUTPUT_PATH}/ExtraDefinitions.swift" if f.include?('extra-definitions')
+    defs << "#{MODULE_OUTPUT_PATH}/Definitions-ignoreTargetModule.swift" if f.include?('ignore-target-module')
+    defs << "#{MODULE_OUTPUT_PATH}/Definitions-ignoreModule.swift" if f.include?('ignore-module')
 
     commands = sdks.map do |sdk|
       %(--toolchain #{toolchain[:toolchain]} -sdk #{sdk} swiftc -swift-version #{toolchain[:version]} ) +
