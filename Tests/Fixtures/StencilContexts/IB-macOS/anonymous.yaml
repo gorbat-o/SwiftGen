@@ -1,4 +1,6 @@
-modules: []
+customSceneTypes: []
+modules:
+- AppKit
 platform: macOS
 storyboards:
 - name: Anonymous

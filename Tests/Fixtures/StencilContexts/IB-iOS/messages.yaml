@@ -1,3 +1,58 @@
+customSceneTypes:
+- module: 
+  segues:
+  - customClass: 
+    customModule: 
+    destination:
+      customClass: XXPickerViewController
+      customModule: 
+      identifier: URLChooser
+      module: 
+      type: XXPickerViewController
+    identifier: 
+    module: UIKit
+    type: UIStoryboardSegue
+  - customClass: CustomSegueClass2
+    customModule: 
+    destination:
+      baseType: ViewController
+      identifier: 
+      module: UIKit
+      type: UIViewController
+    identifier: CustomBack
+    module: 
+    type: CustomSegueClass2
+  - customClass: 
+    customModule: 
+    destination:
+      baseType: ViewController
+      identifier: 
+      module: UIKit
+      type: UIViewController
+    identifier: Embed
+    module: UIKit
+    type: UIStoryboardSegue
+  - customClass: 
+    customModule: 
+    destination:
+      baseType: ViewController
+      identifier: Composer
+      module: UIKit
+      type: UIViewController
+    identifier: NonCustom
+    module: UIKit
+    type: UIStoryboardSegue
+  - customClass: CustomSegueClass
+    customModule: 
+    destination:
+      baseType: NavigationController
+      identifier: NavCtrl
+      module: UIKit
+      type: UINavigationController
+    identifier: Show-NavCtrl
+    module: 
+    type: CustomSegueClass
+  type: XXPickerViewController
 modules:
 - UIKit
 platform: iOS
@@ -30,21 +85,41 @@ storyboards:
   segues:
   - customClass: CustomSegueClass2
     customModule: 
+    destination:
+      baseType: ViewController
+      identifier: 
+      module: UIKit
+      type: UIViewController
     identifier: CustomBack
     module: 
     type: CustomSegueClass2
   - customClass: 
     customModule: 
+    destination:
+      baseType: ViewController
+      identifier: 
+      module: UIKit
+      type: UIViewController
     identifier: Embed
     module: UIKit
     type: UIStoryboardSegue
   - customClass: 
     customModule: 
+    destination:
+      baseType: ViewController
+      identifier: Composer
+      module: UIKit
+      type: UIViewController
     identifier: NonCustom
     module: UIKit
     type: UIStoryboardSegue
   - customClass: CustomSegueClass
     customModule: 
+    destination:
+      baseType: NavigationController
+      identifier: NavCtrl
+      module: UIKit
+      type: UINavigationController
     identifier: Show-NavCtrl
     module: 
     type: CustomSegueClass

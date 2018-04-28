@@ -1,3 +1,99 @@
+customSceneTypes:
+- module: 
+  segues:
+  - customClass: 
+    customModule: 
+    destination:
+      baseType: ViewController
+      identifier: Validate_Password
+      module: UIKit
+      type: UIViewController
+    identifier: ShowPassword
+    module: UIKit
+    type: UIStoryboardSegue
+  type: CreateAccViewController
+- module: 
+  segues:
+  - customClass: 
+    customModule: 
+    destination:
+      customClass: XXPickerViewController
+      customModule: 
+      identifier: URLChooser
+      module: 
+      type: XXPickerViewController
+    identifier: 
+    module: UIKit
+    type: UIStoryboardSegue
+  - customClass: CustomSegueClass2
+    customModule: 
+    destination:
+      baseType: ViewController
+      identifier: 
+      module: UIKit
+      type: UIViewController
+    identifier: CustomBack
+    module: 
+    type: CustomSegueClass2
+  - customClass: 
+    customModule: 
+    destination:
+      baseType: ViewController
+      identifier: 
+      module: UIKit
+      type: UIViewController
+    identifier: Embed
+    module: UIKit
+    type: UIStoryboardSegue
+  - customClass: 
+    customModule: 
+    destination:
+      baseType: ViewController
+      identifier: Composer
+      module: UIKit
+      type: UIViewController
+    identifier: NonCustom
+    module: UIKit
+    type: UIStoryboardSegue
+  - customClass: CustomSegueClass
+    customModule: 
+    destination:
+      baseType: NavigationController
+      identifier: NavCtrl
+      module: UIKit
+      type: UINavigationController
+    identifier: Show-NavCtrl
+    module: 
+    type: CustomSegueClass
+  type: XXPickerViewController
+- module: LocationPicker
+  segues:
+  - customClass: SlideDownSegue
+    customModule: CustomSegue
+    destination:
+      customClass: SLKTextViewController
+      customModule: SlackTextViewController
+      identifier: public
+      module: SlackTextViewController
+      type: SLKTextViewController
+    identifier: private
+    module: CustomSegue
+    type: SlideDownSegue
+  type: LocationPickerViewController
+- module: SlackTextViewController
+  segues:
+  - customClass: SlideDownSegue
+    customModule: CustomSegue
+    destination:
+      customClass: SLKTextViewController
+      customModule: SlackTextViewController
+      identifier: public
+      module: SlackTextViewController
+      type: SLKTextViewController
+    identifier: private
+    module: CustomSegue
+    type: SlideDownSegue
+  type: SLKTextViewController
 modules:
 - AVKit
 - CustomSegue
@@ -24,6 +120,12 @@ storyboards:
   segues:
   - customClass: SlideDownSegue
     customModule: CustomSegue
+    destination:
+      customClass: SLKTextViewController
+      customModule: SlackTextViewController
+      identifier: public
+      module: SlackTextViewController
+      type: SLKTextViewController
     identifier: private
     module: CustomSegue
     type: SlideDownSegue
@@ -112,21 +214,41 @@ storyboards:
   segues:
   - customClass: CustomSegueClass2
     customModule: 
+    destination:
+      baseType: ViewController
+      identifier: 
+      module: UIKit
+      type: UIViewController
     identifier: CustomBack
     module: 
     type: CustomSegueClass2
   - customClass: 
     customModule: 
+    destination:
+      baseType: ViewController
+      identifier: 
+      module: UIKit
+      type: UIViewController
     identifier: Embed
     module: UIKit
     type: UIStoryboardSegue
   - customClass: 
     customModule: 
+    destination:
+      baseType: ViewController
+      identifier: Composer
+      module: UIKit
+      type: UIViewController
     identifier: NonCustom
     module: UIKit
     type: UIStoryboardSegue
   - customClass: CustomSegueClass
     customModule: 
+    destination:
+      baseType: NavigationController
+      identifier: NavCtrl
+      module: UIKit
+      type: UINavigationController
     identifier: Show-NavCtrl
     module: 
     type: CustomSegueClass
@@ -167,6 +289,11 @@ storyboards:
   segues:
   - customClass: 
     customModule: 
+    destination:
+      baseType: ViewController
+      identifier: Validate_Password
+      module: UIKit
+      type: UIViewController
     identifier: ShowPassword
     module: UIKit
     type: UIStoryboardSegue
