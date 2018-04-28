@@ -100,6 +100,75 @@ internal enum XCTStoryboardsScene {
   }
 }
 
+internal extension CustomTabViewController {
+  internal enum XCTStoryboardsSegue: String {
+    case embed = "Embed"
+    case modal = "Modal"
+    case popover = "Popover"
+    case sheet = "Sheet"
+    case show = "Show"
+    case `public`
+  }
+
+  func perform(segue: XCTStoryboardsSegue, sender: Any? = nil) {
+    performSegue(withIdentifier: segue.rawValue, sender: sender)
+  }
+
+  internal enum TypedXCTStoryboardsSegue {
+    case embed(destination: AppKit.NSViewController)
+    case modal(destination: AppKit.NSViewController)
+    case popover(destination: AppKit.NSViewController)
+    case sheet(destination: AppKit.NSViewController)
+    case show(destination: AppKit.NSViewController)
+    case `public`(destination: AppKit.NSViewController, segue: FadeSegue.SlowFadeSegue)
+    case customUnnamedSegue
+
+    // swiftlint:disable cyclomatic_complexity
+    init(segue: NSStoryboardSegue) {
+      switch segue.identifier ?? "" {
+      case "Embed":
+        guard let vc = segue.destinationController as? AppKit.NSViewController else {
+          fatalError("Destination of segue 'Embed' is not of the expected type AppKit.NSViewController.")
+        }
+        self = .embed(destination: vc)
+      case "Modal":
+        guard let vc = segue.destinationController as? AppKit.NSViewController else {
+          fatalError("Destination of segue 'Modal' is not of the expected type AppKit.NSViewController.")
+        }
+        self = .modal(destination: vc)
+      case "Popover":
+        guard let vc = segue.destinationController as? AppKit.NSViewController else {
+          fatalError("Destination of segue 'Popover' is not of the expected type AppKit.NSViewController.")
+        }
+        self = .popover(destination: vc)
+      case "Sheet":
+        guard let vc = segue.destinationController as? AppKit.NSViewController else {
+          fatalError("Destination of segue 'Sheet' is not of the expected type AppKit.NSViewController.")
+        }
+        self = .sheet(destination: vc)
+      case "Show":
+        guard let vc = segue.destinationController as? AppKit.NSViewController else {
+          fatalError("Destination of segue 'Show' is not of the expected type AppKit.NSViewController.")
+        }
+        self = .show(destination: vc)
+      case "public":
+        guard let segue = segue as? FadeSegue.SlowFadeSegue else {
+          fatalError("Segue 'public' is not of the expected type FadeSegue.SlowFadeSegue.")
+        }
+        guard let vc = segue.destinationController as? AppKit.NSViewController else {
+          fatalError("Destination of segue 'public' is not of the expected type AppKit.NSViewController.")
+        }
+        self = .`public`(destination: vc, segue: segue)
+      case "":
+        self = .customUnnamedSegue
+      default:
+        fatalError("Unrecognized segue '\(segue.identifier ?? "")' in CustomTabViewController")
+      }
+    }
+    // swiftlint:enable cyclomatic_complexity
+  }
+}
+
 internal enum XCTStoryboardsSegue {
   internal enum Message: String, SegueType {
     case embed = "Embed"
