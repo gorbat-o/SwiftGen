@@ -9,6 +9,7 @@ customSceneTypes:
       module: AppKit
       type: NSSplitViewController
     identifier: 
+    kind: relationship
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -19,6 +20,7 @@ customSceneTypes:
       module: AppKit
       type: NSViewController
     identifier: Embed
+    kind: embed
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -29,6 +31,7 @@ customSceneTypes:
       module: AppKit
       type: NSViewController
     identifier: Modal
+    kind: modal
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -39,6 +42,7 @@ customSceneTypes:
       module: AppKit
       type: NSViewController
     identifier: Popover
+    kind: popover
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -49,6 +53,7 @@ customSceneTypes:
       module: AppKit
       type: NSViewController
     identifier: Sheet
+    kind: sheet
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -59,6 +64,7 @@ customSceneTypes:
       module: AppKit
       type: NSViewController
     identifier: Show
+    kind: show
     module: AppKit
     type: NSStoryboardSegue
   - customClass: SlowFadeSegue
@@ -69,6 +75,7 @@ customSceneTypes:
       module: AppKit
       type: NSViewController
     identifier: public
+    kind: custom
     module: FadeSegue
     type: SlowFadeSegue
   type: CustomTabViewController
@@ -163,6 +170,7 @@ storyboards:
       module: AppKit
       type: NSViewController
     identifier: Embed
+    kind: embed
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -173,6 +181,7 @@ storyboards:
       module: AppKit
       type: NSViewController
     identifier: Modal
+    kind: modal
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -183,6 +192,7 @@ storyboards:
       module: AppKit
       type: NSViewController
     identifier: Popover
+    kind: popover
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -193,6 +203,7 @@ storyboards:
       module: AppKit
       type: NSViewController
     identifier: Sheet
+    kind: sheet
     module: AppKit
     type: NSStoryboardSegue
   - customClass: 
@@ -203,6 +214,7 @@ storyboards:
       module: AppKit
       type: NSViewController
     identifier: Show
+    kind: show
     module: AppKit
     type: NSStoryboardSegue
   - customClass: SlowFadeSegue
@@ -213,6 +225,7 @@ storyboards:
       module: AppKit
       type: NSViewController
     identifier: public
+    kind: custom
     module: FadeSegue
     type: SlowFadeSegue
 - name: Placeholder

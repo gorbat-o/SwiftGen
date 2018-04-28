@@ -25,6 +25,7 @@ import Foundation
           such as GLKit depending on the base type (can be empty)
     - `segues`: `Array` - List of segues
        - `identifier`: `String` — The segue identifier
+       - `kind`: `String` — The kind of the segue (show, presentation, embed, relationship, custom, ...)
        - `customClass`: `String` — The custom class of the segue (absent if generic UIStoryboardSegue)
        - `customModule`: `String` — The custom module of the segue (absent if no custom segue class)
        - `type`: `String` — The fully qualified type of the segue (custom class, or base type prefixed with platform
@@ -95,6 +96,7 @@ extension InterfaceBuilder.Parser {
   private func map(segue: InterfaceBuilder.Segue, destination: InterfaceBuilder.Scene?) -> [String: Any] {
     var result: [String: Any] = [
       "identifier": segue.identifier,
+      "kind": segue.kind,
       "customClass": segue.customClass ?? "",
       "customModule": segue.customModule ?? "",
       "type": segue.type,

@@ -9,6 +9,7 @@ customSceneTypes:
       module: UIKit
       type: UIViewController
     identifier: ShowPassword
+    kind: show
     module: UIKit
     type: UIStoryboardSegue
   type: CreateAccViewController
@@ -23,6 +24,7 @@ customSceneTypes:
       module: 
       type: XXPickerViewController
     identifier: 
+    kind: show
     module: UIKit
     type: UIStoryboardSegue
   - customClass: CustomSegueClass2
@@ -33,6 +35,7 @@ customSceneTypes:
       module: UIKit
       type: UIViewController
     identifier: CustomBack
+    kind: custom
     module: 
     type: CustomSegueClass2
   - customClass: 
@@ -43,6 +46,7 @@ customSceneTypes:
       module: UIKit
       type: UIViewController
     identifier: Embed
+    kind: embed
     module: UIKit
     type: UIStoryboardSegue
   - customClass: 
@@ -53,6 +57,7 @@ customSceneTypes:
       module: UIKit
       type: UIViewController
     identifier: NonCustom
+    kind: showDetail
     module: UIKit
     type: UIStoryboardSegue
   - customClass: CustomSegueClass
@@ -63,6 +68,7 @@ customSceneTypes:
       module: UIKit
       type: UINavigationController
     identifier: Show-NavCtrl
+    kind: presentation
     module: 
     type: CustomSegueClass
   type: XXPickerViewController
@@ -77,6 +83,7 @@ customSceneTypes:
       module: SlackTextViewController
       type: SLKTextViewController
     identifier: private
+    kind: custom
     module: CustomSegue
     type: SlideDownSegue
   type: LocationPickerViewController
@@ -91,6 +98,7 @@ customSceneTypes:
       module: SlackTextViewController
       type: SLKTextViewController
     identifier: private
+    kind: custom
     module: CustomSegue
     type: SlideDownSegue
   type: SLKTextViewController
@@ -127,6 +135,7 @@ storyboards:
       module: SlackTextViewController
       type: SLKTextViewController
     identifier: private
+    kind: custom
     module: CustomSegue
     type: SlideDownSegue
 - initialScene:
@@ -220,6 +229,7 @@ storyboards:
       module: UIKit
       type: UIViewController
     identifier: CustomBack
+    kind: custom
     module: 
     type: CustomSegueClass2
   - customClass: 
@@ -230,6 +240,7 @@ storyboards:
       module: UIKit
       type: UIViewController
     identifier: Embed
+    kind: embed
     module: UIKit
     type: UIStoryboardSegue
   - customClass: 
@@ -240,6 +251,7 @@ storyboards:
       module: UIKit
       type: UIViewController
     identifier: NonCustom
+    kind: showDetail
     module: UIKit
     type: UIStoryboardSegue
   - customClass: CustomSegueClass
@@ -250,6 +262,7 @@ storyboards:
       module: UIKit
       type: UINavigationController
     identifier: Show-NavCtrl
+    kind: presentation
     module: 
     type: CustomSegueClass
 - name: Placeholder
@@ -295,5 +308,6 @@ storyboards:
       module: UIKit
       type: UIViewController
     identifier: ShowPassword
+    kind: show
     module: UIKit
     type: UIStoryboardSegue
