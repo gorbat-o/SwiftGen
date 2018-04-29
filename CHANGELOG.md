@@ -25,6 +25,9 @@
 * Renamed the `storyboards` command to `ib`, to better reflect it's purpose. An alias for `storyboards` still exists, but it will be removed at some point.  
   [David Jennes](https://github.com/djbe) 
   [#423](https://github.com/SwiftGen/SwiftGen/pull/423)
+* Storyboards: split up the template into 2 parts: one for segues and one for scenes.  
+  [David Jennes](https://github.com/djbe) 
+  [#419](https://github.com/SwiftGen/SwiftGen/pull/419)
 
 ### New Features
 
