@@ -6,6 +6,14 @@
 
 import Foundation
 
+extension Dictionary {
+  func merging(_ other: [Key: Value]) -> [Key: Value] {
+    return merging(other) { current, _ in
+      current
+    }
+  }
+}
+
 /*
  - `modules`    : `Array<String>` — List of modules used by scenes and segues — typically used for "import" statements
  - `platform`   : `String` — Name of the target platform (only available if all storyboards target the same platform)
@@ -70,21 +78,19 @@ extension InterfaceBuilder.Parser {
   }
 
   private func map(scene: InterfaceBuilder.Scene) -> [String: Any] {
+    let result = map(swiftType: scene)
+
     if let customClass = scene.customClass {
-      return [
+      return result.merging([
         "identifier": scene.identifier,
         "customClass": customClass,
-        "customModule": scene.customModule ?? "",
-        "type": scene.type,
-        "module": scene.module ?? ""
-      ]
+        "customModule": scene.customModule ?? ""
+      ])
     } else {
-      return [
+      return result.merging([
         "identifier": scene.identifier,
-        "baseType": scene.tag.uppercasedFirst(),
-        "type": scene.type,
-        "module": scene.module ?? ""
-      ]
+        "baseType": scene.tag.uppercasedFirst()
+      ])
     }
   }
 
@@ -94,14 +100,12 @@ extension InterfaceBuilder.Parser {
   }
 
   private func map(segue: InterfaceBuilder.Segue, destination: InterfaceBuilder.Scene?) -> [String: Any] {
-    var result: [String: Any] = [
+    var result = map(swiftType: segue).merging([
       "identifier": segue.identifier,
       "kind": segue.kind,
       "customClass": segue.customClass ?? "",
-      "customModule": segue.customModule ?? "",
-      "type": segue.type,
-      "module": segue.module ?? ""
-    ]
+      "customModule": segue.customModule ?? ""
+    ])
 
     if let destination = destination {
       result["destination"] = map(scene: destination)
@@ -111,15 +115,20 @@ extension InterfaceBuilder.Parser {
   }
 
   private func map(customType: InterfaceBuilder.CustomType) -> [String: Any] {
-    return [
-      "type": customType.type,
-      "module": customType.module,
+    return map(swiftType: customType).merging([
       "segues": customType.segues
         .sorted { $0.identifier < $1.identifier }
         .map { segue -> Any in
           let destination = customType.destinations[segue]
           return map(segue: segue, destination: destination)
         }
+    ])
+  }
+
+  private func map(swiftType: InterfaceBuilderSwiftType) -> [String: Any] {
+    return [
+      "type": swiftType.type,
+      "module": swiftType.module ?? ""
     ]
   }
 }

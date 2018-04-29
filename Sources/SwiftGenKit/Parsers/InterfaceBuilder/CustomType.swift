@@ -7,15 +7,15 @@
 import Foundation
 
 extension InterfaceBuilder {
-  struct CustomType {
+  struct CustomType: InterfaceBuilderSwiftType {
     let type: String
-    let module: String
+    let module: String?
     var segues = Set<Segue>()
     var destinations = [Segue: Scene]()
 
     init(scene: Scene) {
       type = scene.type
-      module = scene.module ?? ""
+      module = scene.module
     }
 
     mutating func add(segue: Segue, destination: Scene?, warningHandler: Parser.MessageHandler?) {
@@ -25,9 +25,9 @@ extension InterfaceBuilder {
       if let destination = destination {
         if let current = destinations[segue] {
           if !areEqual(current, destination) {
-            let message = "warning: The segue with identifier '\(segue.identifier)' in \(module).\(type) has " +
-              "multiple destination types: \(destination.customModule ?? "").\(destination.customClass ?? "") and " +
-              "\(destination.customModule ?? "").\(destination.customClass ?? "")."
+            let message = "warning: The segue with identifier '\(segue.identifier)' in \(module ?? "").\(type) has " +
+              "multiple destination types: \(destination.module ?? "").\(destination.type) and " +
+              "\(destination.module ?? "").\(destination.type)."
             warningHandler?(message, #file, #line)
           }
         } else {

@@ -15,23 +15,27 @@ extension InterfaceBuilder {
     let customModule: String?
     let destination: String
     let platform: Platform
+  }
+}
 
-    var type: String {
-      if let customClass = customClass {
-        return customClass
-      } else {
-        return "\(platform.prefix)StoryboardSegue"
-      }
+// MARK: - SwiftType
+
+extension InterfaceBuilder.Segue: InterfaceBuilderSwiftType {
+  var type: String {
+    if let customClass = customClass {
+      return customClass
+    } else {
+      return "\(platform.prefix)StoryboardSegue"
     }
+  }
 
-    var module: String? {
-      if let customModule = customModule {
-        return customModule
-      } else if customClass == nil {
-        return platform.module
-      } else {
-        return nil
-      }
+  var module: String? {
+    if let customModule = customModule {
+      return customModule
+    } else if customClass == nil {
+      return platform.module
+    } else {
+      return nil
     }
   }
 }

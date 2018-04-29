@@ -16,33 +16,37 @@ extension InterfaceBuilder {
     let customModule: String?
     let segues: Set<Segue>
     let platform: Platform
+  }
+}
 
-    private static let tagTypeMap = [
-      "avPlayerViewController": (type: "AVPlayerViewController", module: "AVKit"),
-      "glkViewController": (type: "GLKViewController", module: "GLKit"),
-      "pagecontroller": (type: "NSPageController", module: nil)
-    ]
+// MARK: - SwiftType
 
-    var type: String {
-      if let customClass = customClass {
-        return customClass
-      } else if let type = Scene.tagTypeMap[tag]?.type {
-        return type
-      } else {
-        return "\(platform.prefix)\(tag.uppercasedFirst())"
-      }
+extension InterfaceBuilder.Scene: InterfaceBuilderSwiftType {
+  private static let tagTypeMap = [
+    "avPlayerViewController": (type: "AVPlayerViewController", module: "AVKit"),
+    "glkViewController": (type: "GLKViewController", module: "GLKit"),
+    "pagecontroller": (type: "NSPageController", module: nil)
+  ]
+
+  var type: String {
+    if let customClass = customClass {
+      return customClass
+    } else if let type = InterfaceBuilder.Scene.tagTypeMap[tag]?.type {
+      return type
+    } else {
+      return "\(platform.prefix)\(tag.uppercasedFirst())"
     }
+  }
 
-    var module: String? {
-      if let customModule = customModule {
-        return customModule
-      } else if let type = Scene.tagTypeMap[tag]?.module {
-        return type
-      } else if customClass == nil {
-        return platform.module
-      } else {
-        return nil
-      }
+  var module: String? {
+    if let customModule = customModule {
+      return customModule
+    } else if let type = InterfaceBuilder.Scene.tagTypeMap[tag]?.module {
+      return type
+    } else if customClass == nil {
+      return platform.module
+    } else {
+      return nil
     }
   }
 }
@@ -50,8 +54,8 @@ extension InterfaceBuilder {
 // MARK: - XML
 
 private enum XML {
-  static let sceneSegueXPath = "//connections/segue"
-  static let sceneIDAttribute = "id"
+  static let segueXPath = "//connections/segue"
+  static let idAttribute = "id"
   static let customClassAttribute = "customClass"
   static let customModuleAttribute = "customModule"
   static let storyboardIdentifierAttribute = "storyboardIdentifier"
@@ -59,12 +63,12 @@ private enum XML {
 
 extension InterfaceBuilder.Scene {
   init(with object: Kanna.XMLElement, platform: InterfaceBuilder.Platform) {
-    sceneID = object[XML.sceneIDAttribute] ?? ""
+    sceneID = object[XML.idAttribute] ?? ""
     identifier = object[XML.storyboardIdentifierAttribute] ?? ""
     tag = object.tagName ?? ""
     customClass = object[XML.customClassAttribute]
     customModule = object[XML.customModuleAttribute]
-    segues = Set(object.xpath(XML.sceneSegueXPath).map {
+    segues = Set(object.xpath(XML.segueXPath).map {
       InterfaceBuilder.Segue(with: $0, platform: platform)
     })
     self.platform = platform
