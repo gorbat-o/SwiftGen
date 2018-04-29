@@ -3,7 +3,6 @@
 // swiftlint:disable sorted_imports
 import Foundation
 import AppKit
-import FadeSegue
 import PrefsWindowController
 
 // swiftlint:disable superfluous_disable_command
@@ -15,7 +14,8 @@ internal protocol StoryboardType {
 
 internal extension StoryboardType {
   static var storyboard: NSStoryboard {
-    return NSStoryboard(name: self.storyboardName, bundle: Bundle(for: BundleToken.self))
+    let name = NSStoryboard.Name(self.storyboardName)
+    return NSStoryboard(name: name, bundle: Bundle(for: BundleToken.self))
   }
 }
 
@@ -24,6 +24,7 @@ internal struct SceneType<T: Any> {
   internal let identifier: String
 
   internal func instantiate() -> T {
+    let identifier = NSStoryboard.SceneIdentifier(self.identifier)
     guard let controller = storyboard.storyboard.instantiateController(withIdentifier: identifier) as? T else {
       fatalError("Controller '\(identifier)' is not of the expected class \(T.self).")
     }
@@ -42,16 +43,8 @@ internal struct InitialSceneType<T: Any> {
   }
 }
 
-internal protocol SegueType: RawRepresentable { }
-
-internal extension NSSeguePerforming {
-  func perform<S: SegueType>(segue: S, sender: Any? = nil) where S.RawValue == String {
-    performSegue?(withIdentifier: segue.rawValue, sender: sender)
-  }
-}
-
 // swiftlint:disable explicit_type_interface identifier_name line_length type_body_length type_name
-internal enum XCTStoryboardsScene {
+internal enum StoryboardScene {
   internal enum AdditionalImport: StoryboardType {
     internal static let storyboardName = "AdditionalImport"
 
@@ -97,17 +90,6 @@ internal enum XCTStoryboardsScene {
     internal static let storyboardName = "Placeholder"
 
     internal static let window = SceneType<AppKit.NSWindowController>(storyboard: Placeholder.self, identifier: "Window")
-  }
-}
-
-internal enum XCTStoryboardsSegue {
-  internal enum Message: String, SegueType {
-    case embed = "Embed"
-    case modal = "Modal"
-    case popover = "Popover"
-    case sheet = "Sheet"
-    case show = "Show"
-    case `public`
   }
 }
 // swiftlint:enable explicit_type_interface identifier_name line_length type_body_length type_name

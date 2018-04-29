@@ -44,15 +44,6 @@ public struct InitialSceneType<T: Any> {
   }
 }
 
-public protocol SegueType: RawRepresentable { }
-
-public extension NSSeguePerforming {
-  func perform<S: SegueType>(segue: S, sender: Any? = nil) where S.RawValue == String {
-    let identifier = NSStoryboardSegue.Identifier(segue.rawValue)
-    performSegue?(withIdentifier: identifier, sender: sender)
-  }
-}
-
 // swiftlint:disable explicit_type_interface identifier_name line_length type_body_length type_name
 public enum StoryboardScene {
   public enum AdditionalImport: StoryboardType {
@@ -100,17 +91,6 @@ public enum StoryboardScene {
     public static let storyboardName = "Placeholder"
 
     public static let window = SceneType<AppKit.NSWindowController>(storyboard: Placeholder.self, identifier: "Window")
-  }
-}
-
-public enum StoryboardSegue {
-  public enum Message: String, SegueType {
-    case embed = "Embed"
-    case modal = "Modal"
-    case popover = "Popover"
-    case sheet = "Sheet"
-    case show = "Show"
-    case `public`
   }
 }
 // swiftlint:enable explicit_type_interface identifier_name line_length type_body_length type_name

@@ -6,7 +6,6 @@ import AVKit
 import CustomSegue
 import GLKit
 import LocationPicker
-import SlackTextViewController
 import UIKit
 
 // swiftlint:disable superfluous_disable_command
@@ -47,15 +46,6 @@ internal struct InitialSceneType<T: Any> {
   }
 }
 
-internal protocol SegueType: RawRepresentable { }
-
-internal extension UIViewController {
-  func perform<S: SegueType>(segue: S, sender: Any? = nil) where S.RawValue == String {
-    let identifier = segue.rawValue
-    performSegue(withIdentifier: identifier, sender: sender)
-  }
-}
-
 // swiftlint:disable explicit_type_interface identifier_name line_length type_body_length type_name
 internal enum StoryboardScene {
   internal enum AdditionalImport: StoryboardType {
@@ -63,7 +53,7 @@ internal enum StoryboardScene {
 
     internal static let initialScene = InitialSceneType<LocationPicker.LocationPickerViewController>(storyboard: AdditionalImport.self)
 
-    internal static let `public` = SceneType<SlackTextViewController.SLKTextViewController>(storyboard: AdditionalImport.self, identifier: "public")
+    internal static let `public` = SceneType<SLKTextViewController>(storyboard: AdditionalImport.self, identifier: "public")
   }
   internal enum Anonymous: StoryboardType {
     internal static let storyboardName = "Anonymous"
@@ -126,21 +116,6 @@ internal enum StoryboardScene {
     internal static let preferences = SceneType<UIKit.UITableViewController>(storyboard: Wizard.self, identifier: "Preferences")
 
     internal static let validatePassword = SceneType<UIKit.UIViewController>(storyboard: Wizard.self, identifier: "Validate_Password")
-  }
-}
-
-internal enum StoryboardSegue {
-  internal enum AdditionalImport: String, SegueType {
-    case `private`
-  }
-  internal enum Message: String, SegueType {
-    case customBack = "CustomBack"
-    case embed = "Embed"
-    case nonCustom = "NonCustom"
-    case showNavCtrl = "Show-NavCtrl"
-  }
-  internal enum Wizard: String, SegueType {
-    case showPassword = "ShowPassword"
   }
 }
 // swiftlint:enable explicit_type_interface identifier_name line_length type_body_length type_name
