@@ -14,24 +14,26 @@ import enum StencilSwiftKit.Parameters
 extension Config {
   struct Entry {
     enum Keys {
-      static let paths = "paths"
-      static let templateName = "templateName"
-      static let templatePath = "templatePath"
+      static let outputs = "outputs"
       static let params = "params"
+      static let paths = "paths"
+
+      // deprecated
       static let output = "output"
     }
 
-    var paths: [Path]
-    var template: TemplateRef
+    var outputs: [Output]
     var parameters: [String: Any]
-    var output: Path
+    var paths: [Path]
 
     mutating func makeRelativeTo(inputDir: Path?, outputDir: Path?) {
       if let inputDir = inputDir {
         self.paths = self.paths.map { $0.isRelative ? inputDir + $0 : $0 }
       }
-      if let outputDir = outputDir, self.output.isRelative {
-        self.output = outputDir + self.output
+      self.outputs = self.outputs.map {
+        var output = $0
+        output.makeRelativeTo(outputDir: outputDir)
+        return output
       }
     }
   }
@@ -50,29 +52,34 @@ extension Config.Entry {
       throw Config.Error.wrongType(key: Keys.paths, expected: "Path or array of Paths", got: type(of: srcs))
     }
 
-    let templateName: String = try Config.Entry.getOptionalField(yaml: yaml, key: Keys.templateName) ?? ""
-    let templatePath: String = try Config.Entry.getOptionalField(yaml: yaml, key: Keys.templatePath) ?? ""
-    self.template = try TemplateRef(templateShortName: templateName, templateFullPath: templatePath)
+    if let data = yaml[Keys.outputs] {
+      do {
+        outputs = try Output.parseCommandOutput(yaml: data)
+      } catch let error as Config.Error {
+        throw error.withKeyPrefixed(by: Keys.outputs)
+      }
+    } else if yaml[Keys.output] != nil {
+      // The config still contains the old style where all properties command properties
+      // are at the same level
+      outputs = try Output.parseCommandOutput(yaml: yaml)
+    } else {
+      throw Config.Error.missingEntry(key: Keys.outputs)
+    }
 
     self.parameters = try Config.Entry.getOptionalField(yaml: yaml, key: Keys.params) ?? [:]
-
-    guard let output: String = try Config.Entry.getOptionalField(yaml: yaml, key: Keys.output) else {
-      throw Config.Error.missingEntry(key: Keys.output)
-    }
-    self.output = Path(output)
   }
 
   static func parseCommandEntry(yaml: Any) throws -> [Config.Entry] {
     if let entry = yaml as? [String: Any] {
       return [try Config.Entry(yaml: entry)]
-    } else if let entry = yaml as? [[String: Any]] {
-      return try entry.map({ try Config.Entry(yaml: $0) })
+    } else if let entries = yaml as? [[String: Any]] {
+      return try entries.map { try Config.Entry(yaml: $0) }
     } else {
       throw Config.Error.wrongType(key: nil, expected: "Dictionary or Array", got: type(of: yaml))
     }
   }
 
-  private static func getOptionalField<T>(yaml: [String: Any], key: String) throws -> T? {
+  static func getOptionalField<T>(yaml: [String: Any], key: String) throws -> T? {
     guard let value = yaml[key] else {
       return nil
     }
@@ -86,16 +93,14 @@ extension Config.Entry {
 /// Convert to CommandLine-equivalent string (for verbose mode, printing linting info, …)
 ///
 extension Config.Entry {
-  func commandLine(forCommand cmd: String) -> String {
-    let tplFlag: String = {
-      switch self.template {
-      case .name(let name): return "-t \(name)"
-      case .path(let path): return "-p \(path.string)"
-      }
-    }()
+  func commandLine(forCommand cmd: String) -> [String] {
     let params = Parameters.flatten(dictionary: self.parameters)
     let paramsList = params.isEmpty ? "" : (" " + params.map { "--param \($0)" }.joined(separator: " "))
     let inputPaths = self.paths.map { $0.string }.joined(separator: " ")
-    return "swiftgen \(cmd) \(tplFlag)\(paramsList) -o \(self.output) \(inputPaths)"
+
+    return outputs.map {
+      let flags = $0.commandLineFlags()
+      return "swiftgen \(cmd) \(flags.templateFlag)\(paramsList) \(flags.outputFlag) \(inputPaths)"
+    }
   }
 }
