@@ -33,7 +33,7 @@ extension Config.Entry {
 }
 
 extension Config.Entry.Output {
-  init(yaml: [String: Any]) throws {
+  init(yaml: [String: Any], logger: (LogLevel, String) -> Void) throws {
     guard let output: String = try Config.Entry.getOptionalField(yaml: yaml, key: Keys.output) else {
       throw Config.Error.missingEntry(key: Keys.output)
     }
@@ -46,9 +46,9 @@ extension Config.Entry.Output {
     self.template = try TemplateRef(templateShortName: templateName, templateFullPath: templatePath)
   }
 
-  static func parseCommandOutput(yaml: Any) throws -> [Config.Entry.Output] {
+  static func parseCommandOutput(yaml: Any, logger: (LogLevel, String) -> Void) throws -> [Config.Entry.Output] {
     return try Config.Entry.parseValueOrArray(yaml: yaml) {
-      return try Config.Entry.Output(yaml: $0)
+      return try Config.Entry.Output(yaml: $0, logger: logger)
     }
   }
 }
