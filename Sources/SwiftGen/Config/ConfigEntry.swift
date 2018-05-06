@@ -13,19 +13,21 @@ import PathKit
 extension Config {
   struct Entry {
     enum Keys {
+      static let inputs = "inputs"
       static let outputs = "outputs"
-      static let paths = "paths"
 
       // Legacy: remove this once we stop supporting the output key at subcommand level
       static let output = "output"
+      // Legacy: remove this once we sto supporting the old paths key (replaced by inputs)
+      static let paths = "paths"
     }
 
+    var inputs: [Path]
     var outputs: [Output]
-    var paths: [Path]
 
     mutating func makeRelativeTo(inputDir: Path?, outputDir: Path?) {
       if let inputDir = inputDir {
-        self.paths = self.paths.map { $0.isRelative ? inputDir + $0 : $0 }
+        self.inputs = self.inputs.map { $0.isRelative ? inputDir + $0 : $0 }
       }
       self.outputs = self.outputs.map {
         var output = $0
@@ -38,20 +40,16 @@ extension Config {
 
 extension Config.Entry {
   init(yaml: [String: Any]) throws {
-    guard let srcs = yaml[Keys.paths] else {
-      throw Config.Error.missingEntry(key: Keys.paths)
+    guard let inputs = yaml[Keys.inputs] ?? yaml[Keys.paths] else {
+      throw Config.Error.missingEntry(key: Keys.inputs)
     }
-    if let srcs = srcs as? String {
-      self.paths = [Path(srcs)]
-    } else if let srcs = srcs as? [String] {
-      self.paths = srcs.map({ Path($0) })
-    } else {
-      throw Config.Error.wrongType(key: Keys.paths, expected: "Path or array of Paths", got: type(of: srcs))
+    self.inputs = try Config.Entry.parseValueOrArray(yaml: inputs, key: Keys.inputs) {
+      Path($0)
     }
 
-    if let data = yaml[Keys.outputs] {
+    if let outputs = yaml[Keys.outputs] {
       do {
-        self.outputs = try Output.parseCommandOutput(yaml: data)
+        self.outputs = try Config.Entry.Output.parseCommandOutput(yaml: outputs)
       } catch let error as Config.Error {
         throw error.withKeyPrefixed(by: Keys.outputs)
       }
@@ -59,19 +57,15 @@ extension Config.Entry {
       // Legacy: remove this once we stop supporting the output key at subcommand level
       // The config still contains the old style where all properties command properties
       // are at the same level
-      self.outputs = try Output.parseCommandOutput(yaml: yaml)
+      self.outputs = try Config.Entry.Output.parseCommandOutput(yaml: yaml)
     } else {
       throw Config.Error.missingEntry(key: Keys.outputs)
     }
   }
 
   static func parseCommandEntry(yaml: Any) throws -> [Config.Entry] {
-    if let entry = yaml as? [String: Any] {
-      return [try Config.Entry(yaml: entry)]
-    } else if let entries = yaml as? [[String: Any]] {
-      return try entries.map { try Config.Entry(yaml: $0) }
-    } else {
-      throw Config.Error.wrongType(key: nil, expected: "Dictionary or Array", got: type(of: yaml))
+    return try Config.Entry.parseValueOrArray(yaml: yaml) {
+      return try Config.Entry(yaml: $0)
     }
   }
 
@@ -84,6 +78,16 @@ extension Config.Entry {
     }
     return typedValue
   }
+
+  static func parseValueOrArray<T, U>(yaml: Any, key: String? = nil, parseValue: (T) throws -> U) throws -> [U] {
+    if let value = yaml as? T {
+      return [try parseValue(value)]
+    } else if let value = yaml as? [T] {
+      return try value.map { try parseValue($0) }
+    } else {
+      throw Config.Error.wrongType(key: key, expected: "\(T.self) or Array of \(T.self)", got: type(of: yaml))
+    }
+  }
 }
 
 /// Convert to CommandLine-equivalent string (for verbose mode, printing linting info, …)
@@ -91,7 +95,7 @@ extension Config.Entry {
 extension Config.Entry {
   func commandLine(forCommand cmd: String) -> [String] {
     return outputs.map {
-      $0.commandLine(forCommand: cmd, inputs: paths)
+      $0.commandLine(forCommand: cmd, inputs: inputs)
     }
   }
 }

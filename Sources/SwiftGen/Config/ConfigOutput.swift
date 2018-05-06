@@ -47,12 +47,8 @@ extension Config.Entry.Output {
   }
 
   static func parseCommandOutput(yaml: Any) throws -> [Config.Entry.Output] {
-    if let entry = yaml as? [String: Any] {
-      return [try Config.Entry.Output(yaml: entry)]
-    } else if let entry = yaml as? [[String: Any]] {
-      return try entry.map({ try Config.Entry.Output(yaml: $0) })
-    } else {
-      throw Config.Error.wrongType(key: nil, expected: "Dictionary or Array", got: type(of: yaml))
+    return try Config.Entry.parseValueOrArray(yaml: yaml) {
+      return try Config.Entry.Output(yaml: $0)
     }
   }
 }
