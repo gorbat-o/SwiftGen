@@ -17,6 +17,16 @@ DEPENDENCIES:
   - SwiftLint (~> 0.25)
   - Yams (~> 0.3)
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Commander
+    - Kanna
+    - PathKit
+    - Stencil
+    - StencilSwiftKit
+    - SwiftLint
+    - Yams
+
 SPEC CHECKSUMS:
   Commander: 6eda7635b133e239faa85bf75dcab88d6fd63aaa
   Kanna: d5ae2a26472f7e7a474e7f36a9cd8aa2c8c63ad3
@@ -28,4 +38,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: fece5b7c875595bf86a7fde01afa792f113d2fbe
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0
